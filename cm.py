@@ -40,13 +40,13 @@ def build_huffman_tree(frequencies):
         merged.right = right
         heapq.heappush(heap, merged)
 
-    return heap[0]  # root of the Huffman tree
+    return heap[0] 
 
 def generate_codes(node, prefix="", codebook=None):
     if codebook is None:
         codebook = {}
 
-    if node.char is not None:  # It's a leaf node
+    if node.char is not None:
         codebook[node.char] = prefix
     else:
         generate_codes(node.left, prefix + "0", codebook)
@@ -60,11 +60,11 @@ def encode_text(text, codebook):
 
 def write_header(filename, codebook):
     with open(filename, 'wb') as file:
-        pickle.dump(codebook, file)  # Serialize the codebook using pickle
+        pickle.dump(codebook, file)
 
 def write_encoded_text(filename, text, codebook):
     encoded_text = encode_text(text, codebook)
-    # Convert the bit string to bytes
+    
     padded_encoded_text = encoded_text + '0' * ((8 - len(encoded_text) % 8) % 8)
     byte_array = bytearray(int(padded_encoded_text[i:i+8], 2) for i in range(0, len(padded_encoded_text), 8))
     
@@ -91,7 +91,7 @@ def decode_text(encoded_text, codebook):
 
 def read_encoded_text(filename, codebook):
     with open(filename, 'rb') as file:
-        file.seek(len(pickle.dumps(codebook)))  # Skip the header
+        file.seek(len(pickle.dumps(codebook)))
         byte_data = file.read()
 
     encoded_text = ''.join(f'{byte:08b}' for byte in byte_data)
